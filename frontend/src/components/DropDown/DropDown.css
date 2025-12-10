@@ -1,0 +1,18 @@
+.expiration-menu {
+    width: 70%;
+    background: white;
+    border: 1px solid #d3d3d3;
+    border-radius: 0;
+    margin-top: 5px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+.expiration-item {
+    padding: 12px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.expiration-item:hover {
+    background: #f1f1f1;
+}
