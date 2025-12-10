@@ -30,9 +30,9 @@ Other: nanoid for unique short links, qrcode.react for QR code generation
 
 ## Prerequisites
 
-- Node.js (v18+ recommended)
-- npm or yarn
-- MongoDB (local or Atlas)
+- Node.js 
+- npm 
+- MongoDB (
 - Git
 
 ---
