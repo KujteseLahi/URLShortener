@@ -62,6 +62,21 @@ export const getUrl = async (req: express.Request, res: express.Response) => {
         res.status(500).send({ message: "Something went wrong!" });
     }
 };
+export const incrementClick = async (req: express.Request, res: express.Response) => {
+    try {
+        const url = await urlModel.findById(req.params.id);
+        if (!url) return res.status(404).json({ message: "URL not found" });
+
+        url.clicks++;
+        await url.save();
+
+        res.status(200).json({ clicks: url.clicks });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Something went wrong!" });
+    }
+};
+
 export const deleteUrl = async (
     req: express.Request,
     res: express.Response
@@ -74,4 +89,7 @@ export const deleteUrl = async (
     } catch (error) {
         res.status(500).send({ message: "Something went wrong!" });
     }
+
+
+
 };

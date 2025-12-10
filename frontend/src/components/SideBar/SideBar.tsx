@@ -5,6 +5,7 @@ import React from "react";
 import { BiTrash } from "react-icons/bi";
 import axios from "axios";
 import { serverUrl } from "../../helpers/Constants.ts";
+import { QRCodeCanvas } from 'qrcode.react';
 
 interface SidebarProps {
     data: UrlData[];
@@ -43,23 +44,28 @@ const SideBar: React.FC<SidebarProps> = ({ data, updateReloadState }) => {
                         return (
                             <li key={item._id} className="d-flex flex-column mb-3">
                                 <div className="d-flex justify-content-between align-items-center">
-                                    <a
-                                        href={isExpired ? undefined : `${item.fullUrl}`}
-                                        target="_blank"
-                                        rel="noreferrer"
+                                    <span
+                                        onClick={async () => {
+                                            if (isExpired) return;
+                                            try {
+                                                await axios.post(`${serverUrl}/shortUrl/click/${item._id}`);
+                                                window.open(item.fullUrl, "_blank");
+                                                updateReloadState();
+                                            } catch (err) {
+                                                console.error(err);
+                                            }
+                                        }}
                                         className="sidebar-link"
                                         style={{
                                             color: isExpired ? "#6c757d" : "#0d6efd",
                                             textDecoration: isExpired ? "line-through" : "underline",
-                                            pointerEvents: isExpired ? "none" : "auto",
-                                            fontWeight: 500,
                                             cursor: isExpired ? "not-allowed" : "pointer",
-
+                                            fontWeight: 500,
                                         }}
                                         aria-disabled={isExpired}
                                     >
-                                        {item.shortUrl}
-                                    </a>
+                                         {item.shortUrl}
+                                    </span>
 
                                     <BiTrash
                                         role="button"
@@ -67,7 +73,6 @@ const SideBar: React.FC<SidebarProps> = ({ data, updateReloadState }) => {
                                         style={{ cursor: "pointer", color: "grey", marginLeft: "8px" }}
                                         onClick={() => deleteUrl(item._id)}
                                     />
-
                                 </div>
 
                                 <p
@@ -80,6 +85,13 @@ const SideBar: React.FC<SidebarProps> = ({ data, updateReloadState }) => {
                                 >
                                     This link has been clicked {item.clicks} {item.clicks === 1 ? "time" : "times"}.
                                 </p>
+                                <div style={{ marginTop: "8px" }}>
+                                    <QRCodeCanvas
+                                        value={`${item.fullUrl}`}
+                                        size={100}
+                                        level="L"
+                                    />
+                                </div>
                             </li>
                         );
                     })}

@@ -11,20 +11,26 @@ const App: React.FC = () => {
     const [data, setData] = React.useState<UrlData[]>([]);
     const [reload, setReload] = React.useState<boolean>(false);
 
-    const updateReloadState = (): void => {
-        setReload(true);
-    };
-
     const fetchTableData = async () => {
         const response = await axios.get(`${serverUrl}/shortUrl`);
-        console.log("The response from server is : ", response);
         setData(response.data);
-        setReload(false);
+    };
+
+    const updateReloadState = () => {
+        setReload((prev) => !prev);
     };
 
     React.useEffect(() => {
         fetchTableData();
     }, [reload]);
+
+    React.useEffect(() => {
+        const interval = setInterval(() => {
+            fetchTableData();
+        }, 10000);
+        return () => clearInterval(interval);
+    }, []); //For seeing in real time the link expiration
+
     return (
         <div
             className="app-container"
