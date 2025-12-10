@@ -87,7 +87,7 @@ const MainContent: React.FC<MainContentProps> = ({ updateReloadState }) => {
 
     return (
         <form onSubmit={handleSubmit} className="app">
-            <h2>URL</h2>
+            <h2>URL Shortener</h2>
 
             <div className="main-content ">
                 <div className="d-flex flex-column mb-4 input-wrapper">
