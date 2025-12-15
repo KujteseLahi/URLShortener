@@ -1,17 +1,17 @@
 import axios from 'axios';
 
 const API = axios.create({
-    baseURL: 'http://localhost:5000', // backend URL
+    baseURL: 'http://localhost:5001',
 });
 
-export const shortenUrl = (originalUrl: string) => {
-    return API.post('/shorten', { originalUrl });
+
+export const deleteUrl = (id: string) => {
+    return API.delete(`/api/shortUrl/${id}`);
 };
 
-export const getStats = (shortId: string) => {
-    return API.get(`/stats/${shortId}`);
-};
-
-export const deleteUrl = (shortId: string) => {
-    return API.delete(`/${shortId}`);
+export const createShortUrl = (fullUrl: string, expiration: Date | null) => {
+    return API.post(`/api/shortUrl`, {fullUrl, expiration});
+}
+export const incrementClick = (id: string) => {
+    return API.post(`/api/shortUrl/click/${id}`);
 };

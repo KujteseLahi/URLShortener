@@ -29,7 +29,7 @@ const App: React.FC = () => {
             fetchTableData();
         }, 10000);
         return () => clearInterval(interval);
-    }, []); //For seeing in real time the link expiration
+    }, []);
 
     return (
         <div

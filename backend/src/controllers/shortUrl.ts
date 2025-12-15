@@ -1,10 +1,8 @@
 import express from "express";
-// @ts-ignore
 import {urlModel} from "../models/shortUrl.ts";
-import {customAlphabet} from "nanoid";
+import {generateShortId} from "../utils/generateShortId.ts";
 
-const alphabet = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-const nanoid = customAlphabet(alphabet, 6);
+
 
 export const createUrl = async (req: express.Request, res: express.Response) => {
     try {
@@ -15,7 +13,8 @@ export const createUrl = async (req: express.Request, res: express.Response) => 
             return res.status(400).json({ message: "No URL provided" });
         }
 
-        const shortUrl = `https://short.link/${nanoid(6)}`;
+
+        const shortUrl = `https://short.link/${generateShortId()}`;
 
         const newUrl = await urlModel.create({
             fullUrl,
@@ -49,7 +48,7 @@ export const getAllUrl = async (
 
 export const getUrl = async (req: express.Request, res: express.Response) => {
     try {
-        const short = await urlModel.findOne({ shortUrl: req.params.id });
+        const short = await urlModel.findOne({ shortUrl: req.params.id! });
         if (!short) return res.status(404).send({ message: "Short URL not found" });
         if (short.expiration && new Date(short.expiration) < new Date()) {
             return res.status(403).send({ message: "This link has expired" });

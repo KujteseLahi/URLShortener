@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import ExpirationDropdown from "../DropDown/DropDown.tsx";
 import Button from "../Button/Button.tsx";
 import './MainContent.css';
-import axios from 'axios';
-import { serverUrl } from "../../helpers/Constants.ts";
+import {createShortUrl} from "../../services/api.ts";
+import Input from "../Input/Input.tsx";
 
 interface MainContentProps {
     updateReloadState: () => void;
@@ -32,9 +32,10 @@ const MainContent: React.FC<MainContentProps> = ({ updateReloadState }) => {
             return false;
         }
     };
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (
+        e: React.FormEvent<HTMLFormElement>
+    ) => {
         e.preventDefault();
-
 
         if (!fullUrl) {
             setError("Please enter a URL.");
@@ -48,15 +49,16 @@ const MainContent: React.FC<MainContentProps> = ({ updateReloadState }) => {
 
         setError("");
 
-
         try {
-            const expiresInMs = expiration ? expirationMapping[expiration] : null;
-            const expirationDate = expiresInMs ? new Date(Date.now() + expiresInMs) : null;
+            const expiresInMs = expiration
+                ? expirationMapping[expiration]
+                : null;
 
-            await axios.post(`${serverUrl}/shorturl`, {
-                fullUrl,
-                expiration: expirationDate,
-            });
+            const expirationDate = expiresInMs
+                ? new Date(Date.now() + expiresInMs)
+                : null;
+
+            await createShortUrl(fullUrl, expirationDate);
 
             setFullUrl("");
             setExpiration("");
@@ -91,19 +93,11 @@ const MainContent: React.FC<MainContentProps> = ({ updateReloadState }) => {
 
             <div className="main-content ">
                 <div className="d-flex flex-column mb-4 input-wrapper">
-                    <input
-                        className="url-input form-control"
-                        type="text"
-                        placeholder="Paste the URL to be shortened"
+                    <Input
                         value={fullUrl}
                         onChange={handleUrlChange}
+                        error={error}
                     />
-
-                    {error && (
-                        <p className="url-error">
-                            {error}
-                        </p>
-                    )}
                     <Button />
                 </div>
                 <div className="d-flex flex-column mb-4">

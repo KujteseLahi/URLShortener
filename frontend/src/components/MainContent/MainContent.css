@@ -3,7 +3,7 @@
     flex-direction: column;
     width: 70%;
     padding: 40px;
-    height: 100vh;
+    height: 95vh;
     margin: 5px auto;
 }
 
@@ -11,33 +11,9 @@
     display: flex;
     flex-direction: row;
     gap: 20px;
+
 }
 
 
-.main-input-box {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
 
-.url-input {
-    height: 50px;
-    width: 400px;
-    background: #fff;
-    border: 1px solid #d3d3d3;
-    padding: 0 12px;
 
-}
-.input-wrapper {
-    position: relative;
-}
-
-.url-error {
-    position: absolute;
-    color: red;
-    font-size: 13px;
-    top: 52px;
-    left: 2px;
-    margin: 0;
-    padding: 0;
-}

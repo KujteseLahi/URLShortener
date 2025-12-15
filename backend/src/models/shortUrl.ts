@@ -1,6 +1,4 @@
 import mongoose from "mongoose";
-import {nanoid} from "nanoid";
-// @ts-ignore
 import {generateShortId} from "../utils/generateShortId.ts";
 
 export interface UrlDocument extends Document {
@@ -31,7 +29,7 @@ const shortUrlSchema = new mongoose.Schema(
             type: Number,
             default: 0,
         },
-        expiration: { type: Date, default: null },
+        expiration: { type: Date, default: null , index: { expireAfterSeconds: 0 },},
     },
     {
         timestamps: true,

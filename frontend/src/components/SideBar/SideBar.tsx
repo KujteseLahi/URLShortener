@@ -2,10 +2,9 @@ import './Sidebar.css';
 import herImage from '../../img/anchorup.png';
 import type { UrlData } from "../../helpers/UrlData.ts";
 import React from "react";
-import { BiTrash } from "react-icons/bi";
-import axios from "axios";
-import { serverUrl } from "../../helpers/Constants.ts";
 import { QRCodeCanvas } from 'qrcode.react';
+import {deleteUrl, incrementClick} from "../../services/api.ts";
+import DeleteIcon from "../DeleteIcon/DeleteIcon.tsx";
 
 interface SidebarProps {
     data: UrlData[];
@@ -13,13 +12,11 @@ interface SidebarProps {
 }
 
 const SideBar: React.FC<SidebarProps> = ({ data, updateReloadState }) => {
-    console.log("Data in SideBar is ", data);
 
 
-    const deleteUrl = async (id: string) => {
+    const deleteShortUrl = async (id: string) => {
         try {
-            const response = await axios.delete(`${serverUrl}/shortUrl/${id}`);
-            console.log("Deleted:", response.data);
+            await deleteUrl(id);
             updateReloadState();
         } catch (error) {
             console.error("Error deleting URL:", error);
@@ -48,7 +45,7 @@ const SideBar: React.FC<SidebarProps> = ({ data, updateReloadState }) => {
                                         onClick={async () => {
                                             if (isExpired) return;
                                             try {
-                                                await axios.post(`${serverUrl}/shortUrl/click/${item._id}`);
+                                                await incrementClick(item._id);
                                                 window.open(item.fullUrl, "_blank");
                                                 updateReloadState();
                                             } catch (err) {
@@ -67,11 +64,8 @@ const SideBar: React.FC<SidebarProps> = ({ data, updateReloadState }) => {
                                          {item.shortUrl}
                                     </span>
 
-                                    <BiTrash
-                                        role="button"
-                                        size={15}
-                                        style={{ cursor: "pointer", color: "grey", marginLeft: "8px" }}
-                                        onClick={() => deleteUrl(item._id)}
+                                    <DeleteIcon
+                                        onClick={() => deleteShortUrl(item._id)}
                                     />
                                 </div>
 
